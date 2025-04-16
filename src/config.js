@@ -381,6 +381,67 @@ export function generateClashRuleSets(selectedRules = [], customRules = []) {
   return { site_rule_providers, ip_rule_providers };
 }
 
+// 创建最终的 sing-box 配置
+export function createFinalSingBoxConfig(selectedRules = [], customRules = []) {
+  // 获取生成的规则集和规则
+  const { site_rule_sets, ip_rule_sets } = generateRuleSets(selectedRules, customRules);
+  const rules = generateRules(selectedRules, customRules);
+
+  // 创建配置基础结构的副本
+  const finalConfig = JSON.parse(JSON.stringify(SING_BOX_CONFIG));
+
+  // 添加规则集到配置中
+  finalConfig.route.rule_set = site_rule_sets.concat(ip_rule_sets);
+
+  // 将规则转换为 sing-box 格式并添加到配置中
+  finalConfig.route.rules = rules.map(rule => {
+    const routeRule = {
+      outbound: rule.outbound
+    };
+
+    // 添加规则集引用
+    if (rule.site_rules && rule.site_rules.length > 0) {
+      routeRule.rule_set = rule.site_rules;
+    }
+
+    if (rule.ip_rules && rule.ip_rules.length > 0) {
+      routeRule.rule_set = routeRule.rule_set || [];
+      routeRule.rule_set = [...routeRule.rule_set, ...rule.ip_rules.map(ip => `${ip}-ip`)];
+    }
+
+    // 添加直接域名/IP规则（如果存在）
+    if (rule.domain_suffix && rule.domain_suffix.length > 0 && rule.domain_suffix[0] !== '') {
+      routeRule.domain_suffix = rule.domain_suffix;
+    }
+
+    if (rule.domain_keyword && rule.domain_keyword.length > 0 && rule.domain_keyword[0] !== '') {
+      routeRule.domain_keyword = rule.domain_keyword;
+    }
+
+    if (rule.ip_cidr && rule.ip_cidr.length > 0 && rule.ip_cidr[0] !== '') {
+      routeRule.ip_cidr = rule.ip_cidr;
+    }
+
+    if (rule.protocol && rule.protocol.length > 0 && rule.protocol[0] !== '') {
+      routeRule.protocol = rule.protocol;
+    }
+
+    return routeRule;
+  });
+
+  // 添加默认规则
+  finalConfig.route.rules.push({
+    rule_set: ['geolocation-!cn'],
+    outbound: '🚀 节点选择'
+  });
+
+  finalConfig.route.rules.push({
+    outbound: 'DIRECT'
+  });
+
+  return finalConfig;
+}
+
 // Singbox configuration
 export const SING_BOX_CONFIG = {
 	dns: {
@@ -472,15 +533,8 @@ export const SING_BOX_CONFIG = {
 		{ type: 'block', tag: 'REJECT' },
 		{ type: 'dns', tag: 'dns-out' }
 	],
-	route : {
-		"rule_set": [
-            {
-                "tag": "geosite-geolocation-!cn",
-                "type": "local",
-                "format": "binary",
-                "path": "geosite-geolocation-!cn.srs"
-            }
-		],
+	route: {
+		rule_set: [],
 		rules: []
 	},
 	experimental: {
