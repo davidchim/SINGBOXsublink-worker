@@ -113,6 +113,12 @@ export const UNIFIED_RULES = [
 		ip_rules: []
 	},
 	{
+		name: 'Coin Exchange',
+		outbound: t('outboundNames.Coin Exchange'),
+		site_rules: ['binance'],
+		ip_rules: []
+	},
+	{
 		name: 'Non-China',
 		outbound: t('outboundNames.Non-China'),
 		site_rules: ['geolocation-!cn'],
