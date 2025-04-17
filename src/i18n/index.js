@@ -154,6 +154,7 @@ const translations = {
       'Financial': '💰 Financial Services',
       'Cloud Services': '☁️ Cloud Services',
       'Non-China': '🌐 Non-China',
+      'Exchange': '🔄 Exchange',
       'GLOBAL': 'GLOBAL'
     },
     UASettings: 'Custom UserAgent',
@@ -232,6 +233,7 @@ const translations = {
       'Financial': '💰 سرویس‌های مالی',
       'Cloud Services': '☁️ سرویس‌های ابری',
       'Non-China': '🌐 خارج از چین',
+      'Exchange': '🔄 مبادله',
       'GLOBAL': 'GLOBAL'
     },
     UASettings: 'Custom UserAgent',
