@@ -113,8 +113,8 @@ export const UNIFIED_RULES = [
 		ip_rules: []
 	},
 	{
-		name: 'Coin Exchange',
-		outbound: t('outboundNames.Coin Exchange'),
+		name: 'Exchange',
+		outbound: t('outboundNames.Exchange'),
 		site_rules: ['binance'],
 		ip_rules: []
 	},
