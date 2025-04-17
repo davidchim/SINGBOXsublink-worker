@@ -75,6 +75,7 @@ const translations = {
       'Financial': '💰 金融服务',
       'Cloud Services': '☁️ 云服务',
       'Non-China': '🌐 非中国',
+      'Exchange': '🔄 交易所',
       'GLOBAL': 'GLOBAL'
     },
     UASettings: '自定义UserAgent',
